@@ -86,7 +86,7 @@ if __name__ == "__main__":
             plot_function(func, -2, 3)
 
             # Set the intervals for the roots
-            intervals = [(0.5, 1.5), (-1.5, -0.5), (1.5, 2.5)]
+            intervals = [(-2, -1), (0, 1), (1, 2)]
             break
         
         else:

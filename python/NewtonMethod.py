@@ -68,39 +68,41 @@ def newton_method(func, grad, x0, tol=1e-6, max_iter=100):
 
 # Main Driver Function:
 if __name__ == "__main__":
-    # Define the 1st Function for which the root is to be found
-    func = lambda x: x**2 - x - 1
-    # Define the gradient of the Function
-    grad = lambda x: 2*x - 1
+    # Ask the user to choose between the two functions
+    choice = input("Choose the function to use (1 or 2):\n"
+                   "1. f(x) = x^2 - x - 1\n"
+                   "2. f(x) = x^3 - x^2 - 2*x + 1\n"
+                   "Enter your choice (1 or 2): ")
 
-    # Uncomment the next two lines to use the 2nd Function
-    #func = lambda x: x**3 - x**2 - 2*x + 1
-    #grad = lambda x: 3*x**2 - 2*x - 2
+    # Assign the selected function and its derivative
+    if choice == '1':
+        func = lambda x: x**2 - x - 1
+        grad = lambda x: 2*x - 1
+    elif choice == '2':
+        func = lambda x: x**3 - x**2 - 2*x + 1
+        grad = lambda x: 3*x**2 - 2*x - 2
+    else:
+        print("Invalid choice! Please enter 1 or 2.")
+        exit()
 
-    # Call plot_function to plot graph of the function
+    # Initial guesses for the roots
+    initial_guesses = [-1, 1, 2.5]
+
+    # Plot the function over a broad interval for visualization
     plot_function(func, -2, 3)
 
-    # Set the initial guesses for the roots
-    x0_1 = 2  # Initial guess for 1st root
-    x0_2 = -1  # Initial guess for 2nd root
+    # Loop through each initial guess
+    for i, x0 in enumerate(initial_guesses, start=1):
+        
+        # Call the Newton's method for the root with the given initial guess
+        our_root = newton_method(func, grad, x0)
+        
+        # Call SciPy method (reference method) for the root with the given initial guess
+        sp_result = sp.optimize.root(func, x0)
+        sp_root = sp_result.x.item()
+        
+        # Print the result for this initial guess
+        print(f"\nRoot found starting from x0 = {x0} by Newton's Method = {our_root:0.8f}.")
+        print(f"Root found starting from x0 = {x0} by SciPy = {sp_root:0.8f}.\n")
 
-    # Call the Newton's method for 1st root
-    our_root_1 = newton_method(func, grad, x0_1)
-
-    # Call SciPy method (reference method) for 1st root
-    sp_result_1 = sp.optimize.root(func, x0_1)
-    sp_root_1 = sp_result_1.x.item()
-
-    # Call the Newton's method for 2nd root
-    our_root_2 = newton_method(func, grad, x0_2)
-
-    # Call SciPy method (reference method) for 2nd root
-    sp_result_2 = sp.optimize.root(func, x0_2)
-    sp_root_2 = sp_result_2.x.item()
-
-    # Print the result
-    print("1st root found by Newton's Method = {:0.8f}.".format(our_root_1))
-    print("1st root found by SciPy = {:0.8f}".format(sp_root_1))
-
-    print("2nd root found by Newton's Method = {:0.8f}.".format(our_root_2))
-    print("2nd root found by SciPy = {:0.8f}".format(sp_root_2))
+    print("Root finding process completed for all initial guesses.")
